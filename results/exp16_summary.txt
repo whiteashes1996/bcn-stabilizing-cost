@@ -1,0 +1,53 @@
+E16: Example 2 real-network study
+  machine: macOS-15.6-arm64-arm-64bit-Mach-O, Python 3.14.3, PuLP 3.3.2 (CBC bundled)
+  protocol: eps_VI=1e-06, stop residual <= eps(1-lam)/(2 lam); k_cap=200; timing = median of reps (5 if N<=1024 else 3), warmup 1; MILP: PuLP+CBC, 60.0s/source; decoy eps=0.05
+
+SURVEY (lambda=1/2, natural Hamming cost):
+  apoptosis        N=     8 M_eff/M=2/2 |Vs|=     3 D= 1 #SCC=     2 max|SCC|=   2 BC=0 t_master=0.0000s t_VI=0.0000s (k=2) ratio=0.097
+  lambda_switch    N=    32 M_eff/M=2/2 |Vs|=    31 D= 7 #SCC=    29 max|SCC|=   3 BC=0 t_master=0.0003s t_VI=0.0001s (k=8) ratio=0.305
+  ara_operon       N=   512 M_eff/M=16/16 |Vs|=   512 D= 3 #SCC=   405 max|SCC|= 108 BC=0 t_master=0.0217s t_VI=0.0106s (k=5) ratio=0.49
+  mammalian_cc     N=   512 M_eff/M=2/2 |Vs|=   512 D= 9 #SCC=   498 max|SCC|=  15 BC=0 t_master=0.0059s t_VI=0.0026s (k=10) ratio=0.448
+  lac_operon       N=  1024 M_eff/M=6/8 |Vs|=  1024 D= 3 #SCC=   919 max|SCC|= 106 BC=0 t_master=0.0195s t_VI=0.0057s (k=4) ratio=0.294
+  t_lgl            N= 65536 M_eff/M=8/8 |Vs|= 65536 D= 5 #SCC= 65497 max|SCC|=  20 BC=2 t_master=21.5194s t_VI=4.0521s (k=23) ratio=0.188
+  ara_restricted   N=   512 M_eff/M=2/16 |Vs|=   512 D= 4 #SCC=   493 max|SCC|=  20 BC=0 t_master=0.0059s t_VI=0.0010s (k=5) ratio=0.17
+  lac_restricted   N=  1024 M_eff/M=2/8 |Vs|=  1024 D= 3 #SCC=  1023 max|SCC|=   2 BC=0 t_master=0.0117s t_VI=0.0018s (k=4) ratio=0.151
+
+DECOYS:
+  B-lac              |S|= 105 regime=detect-only  parking=  6 margin=1.0 imp_master=None
+  B-lac-restricted   |S|=  34 regime=detect-only  parking=  6 margin=2.0250000000000004 imp_master=None
+  A-tlgl             |S|=  20 regime=solvable     parking=1240 margin=0.75 imp_master=0
+  C-mcc-cycle        |S|=  14 regime=solvable     parking=234 margin=0.7000000000000002 imp_master=0
+  ara-restricted     |S|=  19 regime=solvable     parking=  6 margin=2.1500000000000004 imp_master=0
+
+MILP:
+  B-lac-restricted   |S|= 34 coverage=1.00 t=3.501s core=None dfs=None
+  A-tlgl             |S|= 20 coverage=1.00 t=1.301s core=True dfs=None
+  C-mcc-cycle        |S|= 14 coverage=1.00 t=0.402s core=True dfs=True
+  ara-restricted     |S|= 19 coverage=1.00 t=0.768s core=True dfs=None
+
+ASSERTIONS:
+  A2/A3 PASS  gen_networks anchors all passed (26 anchors, incl. dual-source diffs and literature fixpoint/attractor anchors)
+  A1 PASS  loader round-trip on all specs; bits == ara_io.inverse_map on ara
+  A4 PASS  8 rows, detect_disagreements=0 on all; BC(g)=0 except t_lgl (two 20-state survival SCCs, solved exactly at the cap)
+  A5 PASS  VI stop rule + monotone + PI lower bound; improper sets agree
+  A6 PASS  improper(master)=0 on all rows; VI proper exactly on the benign rows and improper on t_lgl (natural-cost traps)
+  A7-ara-golden PASS  tab:ara-decoy J/V values and 6-state gap set reproduced
+  A7 PASS  decoy verdicts True, VI parks (parking == gap set), master repairs, exact rechecks agree
+  A8 PASS  MILP == SolveCore/DFS on certified states; ara-20 fully certified; targets: [('B-lac-restricted', 34, 1.0), ('A-tlgl', 20, 1.0), ('C-mcc-cycle', 14, 1.0), ('ara-restricted', 19, 1.0)]
+  A9 PASS  lambda=0.9 margins recorded (2 components); all sub-1e-6 margins re-verified under exact()
+  A10 PASS  each t is a median of warmup-1 + >=3 reps; raw times kept in the csv
+
+NOTES:
+  apoptosis: the death fixpoint delta_8^5 is reverse-reachable from |Vs|=1 state(s) only (TNF alone cannot force death); survey row therefore targets survival homeostasis (plan §7.3)
+  T-LGL fixpoints under no-drug input: [50642, 58834, 65535]; diseased candidates: [50642, 58834]
+  MILP target B-lac skipped: |S|=105 > 60
+
+BIB ENTRIES TO ADD (plan §9 correction 2):
+  faure2006mammalian: Faure, Naldi, Chaouiya & Thieffry, Bioinformatics 22(14):e124-e131, 2006
+  zhang2015invertibility: Zhang & Zhang, Automatica (invertibility & nonsingularity of BCNs), 2015
+  kobayashi2013apoptosis: Kobayashi & Hiraishi, IEICE Trans. Fundamentals E96-A(2):532-539, 2013
+  gao2021tcyb: Gao, Sun, Xiang, Qin & Lee, IEEE Trans. Cybernetics, DOI 10.1109/TCYB.2020.3003552
+  murrugarra2016 (optional): Murrugarra et al., BMC Systems Biology 10:94, 2016
+
+  total runtime: 162.5 s
+  ALL 10 ASSERTION GROUPS PASSED

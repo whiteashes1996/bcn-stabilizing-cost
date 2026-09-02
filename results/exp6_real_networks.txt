@@ -1,0 +1,8 @@
+E6: Real BCN network scan
+  networks: ara_operon (N=512), lambda_switch (N=32)
+  rows: 22
+  ara_operon xe=9 lam=0.5: |R|=512, t_master=0.014s, t_vi=0.0043s, gap=0
+  ara_operon xe=9 lam=0.9: |R|=512, t_master=0.014s, t_vi=0.0051s, gap=0
+  ara_operon xe=265 lam=0.5: |R|=512, t_master=0.0139s, t_vi=0.007s, gap=0
+  ara_operon xe=265 lam=0.9: |R|=512, t_master=0.0149s, t_vi=0.0056s, gap=0
+  ASSERTIONS PASSED

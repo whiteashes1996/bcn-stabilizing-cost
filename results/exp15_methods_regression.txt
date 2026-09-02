@@ -1,0 +1,38 @@
+E15: regression & cross-check for methods.py (Task 0)
+  instance: Example 1 via import exp14_ex1_n4 (N=16, M=2, lambda=1/2)
+  contexts: exact() vs floating(1e-9)
+
+  acceptance items:
+    M01 PASS  stg_from_L == exp14 graph, arc by arc (32 arcs)
+    M02 PASS  B01: f(1,u_e)=1, g=0
+    M03 PASS  B02: V_s = 1..14; 15,16 unstabilizable
+    M04 PASS  B03: arcs 4->15, 13->16 pruned
+    M05 PASS  B04: 10 components; nontrivial {2,3,5},{6,7,10}; order {8} < H < B
+    M06 PASS  B05: e(2)=3.5, e(3)=e(5)=inf; e(6)=4.5, e(7)=4.1875, e(10)=3.5
+    M07 PASS  B06: hasCycle(H) only, 9 folded components
+    M08 PASS  B07: B (sweeps,strict)=(3,2)=D+1; H=(3,3) never settles; detector=sweep
+    M09 PASS  B08: g_loop=7/4 < thresholds 49/16,133/64,77/32; B cycle & 9-selfloop not beneficial
+    M10 PASS  B09: J == hand table == DFS oracle on all 16 states
+    M11 PASS  B10: SolveCore == (3.5, 2.375, 2.75) on H
+    M12 PASS  B11: V exact; gap = {2,3,4,5,13,14}
+    M13 PASS  B12: VI/PI/Floyd improper = [2, 3, 4, 5, 13, 14]; master = 0
+    M14 PASS  B13: monotone >= V*; greedy sets stable from k0(VI)=4, k0(Floyd)=3
+    M15 PASS  B14: closed-loop cost of mu* == J at all 14 states
+    M16 PASS  B15: bracket [0.767591879244,0.767591879244] ~ (1+sqrt(13))/6; floating() entry raises ValueError
+    M17 PASS  B16: 57 finite values, all denominators powers of 2
+    M18 PASS  R2: core_solver route == methods+exact on J and V, pointwise
+    M19 PASS  R3: |J_float - J_exact| < 1e-9 on the 14 finite states; inf at 15,16
+    M20 PASS  R3: float improper sets identical to exact (VI/PI/Floyd/master)
+    M21 PASS  R3: per-component verdicts match; 0 detector disagreements; margins > 1e-8
+    M22 PASS  exact: Lemma lc-cap verdict == Prop gap-W(b) verdict, all 9 components
+    M23 PASS  milp_oracle == exact SolveCore values on H (CBC)
+    M24 PASS  R5: exp10 and exp14 subprocesses pass
+    M25 PASS  no core_solver import; core_solver/exp10 clean in git; exp14 pinned by sha256; tex changes limited to the pinned external edits
+
+  R4 fuzz (|S|<=7, lambda=7/10, non-dyadic costs, 150 cases, 89 with a beneficial cycle):
+    float pi-tight  agrees with exact: 150/150
+    float sweep     agrees with exact: 150/150
+    (sweep flips are expected only for large |S|, where the residual lambda^|S| falls below eps; see methods.py header)
+
+  runtime: 2.24 s
+  ALL 25 ACCEPTANCE ITEMS PASSED

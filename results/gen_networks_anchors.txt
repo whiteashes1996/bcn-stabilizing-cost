@@ -1,0 +1,34 @@
+gen_networks: all anchors passed
+
+  A-ara-rules PASS  matrix == rules at all 8192 (x,u), nodes=9
+  A-lam-shape PASS  n=5 m=1
+  A-lam-diff PASS  unique node order matching the Zhu/Gao matrix: [('N', 'cI', 'cII', 'cIII', 'cro')]
+  A-lam-lysogeny PASS  delta_32^24 is the lysogenic profile under order ('N', 'cI', 'cII', 'cIII', 'cro')
+  A-lam-lysis PASS  delta_32^31 is on the lytic side
+  A-apop-fps0 PASS  [(0, 0, 0), (0, 1, 1)]
+  A-apop-fps1 PASS  [(0, 1, 1), (1, 0, 1)]
+  A-mcc-g0 PASS  CycD=0 attractors: [1]
+  A-mcc-cycle7 PASS  CycD=1 attractors: [7]
+  A-lac-validU PASS  valid inputs [1, 3, 4, 5, 7, 8]
+  A-lac-invariant PASS  432 valid states closed under the 6 valid inputs
+  A-lac-bistable-count PASS  fixpoints per valid input: {1: 1, 3: 1, 4: 1, 5: 1, 7: 2, 8: 1}
+  A-lac-bistable-input PASS  bistable input decodes to (Ge,Le,Lem)=(0, 0, 1) (no glucose, medium lactose)
+  A-lac-onoff PASS  the two fixpoints are ON (M=P=B=1) and OFF (M=P=B=0)
+  A-tlgl-shape PASS  n=16 m=3 z=1
+  A-tlgl-diff PASS  rule-generated L identical to the sbcn_mmc download (524288 entries)
+  A-tlgl-xh-bits PASS  (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
+  A-tlgl-xh-u1 PASS  (u1,u2,u3)=(1, 1, 1): xh not fixed
+  A-tlgl-xh-u2 PASS  (u1,u2,u3)=(1, 1, 0): xh not fixed
+  A-tlgl-xh-u3 PASS  (u1,u2,u3)=(1, 0, 1): xh fixed
+  A-tlgl-xh-u4 PASS  (u1,u2,u3)=(1, 0, 0): xh fixed
+  A-tlgl-xh-u5 PASS  (u1,u2,u3)=(0, 1, 1): xh not fixed
+  A-tlgl-xh-u6 PASS  (u1,u2,u3)=(0, 1, 0): xh not fixed
+  A-tlgl-xh-u7 PASS  (u1,u2,u3)=(0, 0, 1): xh fixed
+  A-tlgl-xh-u8 PASS  (u1,u2,u3)=(0, 0, 0): xh fixed
+  A-tlgl-x0 PASS  delta^58834 decodes to 0001101000101110 (Caspase, Apoptosis OFF)
+
+  lambda switch node order (inferred): ['N', 'cI', 'cII', 'cIII', 'cro']
+  written: /Users/whiteashes/科研论文/镇定最小代价/simulations/networks/apoptosis.txt
+  written: /Users/whiteashes/科研论文/镇定最小代价/simulations/networks/mammalian_cc.txt
+  written: /Users/whiteashes/科研论文/镇定最小代价/simulations/networks/lac_operon.txt
+  written: /Users/whiteashes/科研论文/镇定最小代价/simulations/networks/t_lgl.txt

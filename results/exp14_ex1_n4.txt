@@ -1,0 +1,61 @@
+E14: four-node BCN, N=16, M=2, xe=delta_16^1, ue=delta_2^1, lambda=1/2
+  L = delta_16[1 3 5 2 2 7 10 1 1 6 9 10 5 13 16 15
+               1 8 5 15 2 8 3 1 9 9 1 6 16 12 16 15]
+  g(x,u) = Hamming(x, x_e) + [u != u_e]   (exact Fractions throughout)
+
+  logical form (Quine-McCluskey over u, x1..x4):
+    x1(t+1) = (x1 & x3) | (~u & ~x1 & x2 & ~x3) | (~u & x1 & ~x2) | (x1 & x2 & x4) | (u & x3 & x4) | (u & x1 & ~x4) | (u & x2 & x3)
+    x2(t+1) = (~x1 & x2 & x4) | (x1 & ~x2 & ~x3) | (x1 & x3 & x4) | (~u & ~x1 & x3 & ~x4) | (u & x2 & ~x3 & ~x4) | (u & x1 & x2 & ~x4)
+    x3(t+1) = (~x1 & x2) | (x2 & x4) | (u & x1 & ~x3) | (x1 & x3 & x4) | (u & ~x1 & x3) | (x1 & ~x2 & ~x3 & ~x4)
+    x4(t+1) = (x2 & x4) | (~x2 & ~x3 & ~x4) | (~u & x1 & ~x3) | (u & ~x2 & ~x4) | (~u & ~x1 & x2 & x3) | (u & ~x1 & ~x2 & x3) | (u & x1 & x3 & ~x4)
+    conjunct counts per update function: [7, 6, 6, 7] (total 26)
+
+  |V_s| = 14 / 16, unstabilizable = [15, 16]
+  components = 10, nontrivial = [[2, 3, 5], [6, 7, 10]]
+  folding: e(2)=3.5, e(3)=e(5)=inf | e(6)=4.5, e(7)=4.1875, e(10)=3.5
+  detection: hasCycle(H)=True (sweeps=3), hasCycle(B)=False (sweeps=3, strict=2, D(B)=2)
+  cycle oracle on H: 7 beneficial cycle(s), g_loop min = 1.75; thresholds 3.0625, 2.078125, 2.40625
+
+  state  bits   d  V_lambda*   J_lambda*   VI    PI    Floyd  master
+  d16^1  (1111) 0          0          0   u=1   u=1   u=1    u=1
+  d16^2  (1110) 1          2        3.5   u=1   u=1   u=1    u=2
+  d16^3  (1101) 1          2      2.375   u=1   u=1   u=1    u=1
+  d16^4  (1100) 2          3       3.75   u=1   u=1   u=1    u=1
+  d16^5  (1011) 1          2       2.75   u=1   u=1   u=1    u=1
+  d16^6  (1010) 2      3.875      3.875   u=1   u=1   u=1    u=1
+  d16^7  (1001) 2       3.75       3.75   u=1   u=1   u=1    u=1
+  d16^8  (1000) 3          3          3   u=1   u=1   u=1    u=1
+  d16^9  (0111) 1          1          1   u=1   u=1   u=1    u=1
+  d16^10 (0110) 2        3.5        3.5   u=2   u=2   u=2    u=2
+  d16^11 (0101) 2        2.5        2.5   u=1   u=1   u=1    u=1
+  d16^12 (0100) 3       4.75       4.75   u=1   u=1   u=1    u=1
+  d16^13 (0011) 2          3      3.375   u=1   u=1   u=1    u=1
+  d16^14 (0010) 3        4.5     4.6875   u=1   u=1   u=1    u=1
+  d16^15 (0001) 3         --        inf   u=-   u=-   u=-    u=-
+  d16^16 (0000) 4         --        inf   u=-   u=-   u=-    u=-
+
+  gap states (V < J): [2, 3, 4, 5, 13, 14]
+  improper: VI=[2, 3, 4, 5, 13, 14], PI=[2, 3, 4, 5, 13, 14], Floyd=[2, 3, 4, 5, 13, 14], master=[]
+  greedy action sets stable from k0(VI)=4, k0(Floyd)=3 (of 64 exact sweeps)
+  lambda*: bisection bracket [0.767591879244, 0.767591879244], closed form (1+sqrt(13))/6 = 0.767591879244
+
+  acceptance items:
+    A01 PASS  f(1,u_e)=1, g(1,u_e)=0
+    A02 PASS  V_s = 1..14, unstabilizable = [15, 16]
+    A03 PASS  arcs 4->15, 13->16 pruned by Step 1
+    A04 PASS  10 components; nontrivial = {2,3,5},{6,7,10}; order {8} < H < B
+    A05 PASS  e(2)=3.5, e(3)=e(5)=inf; e(6)=4.5, e(7)=4.1875, e(10)=3.5
+    A06 PASS  hasCycle(H)=True, all other components False
+    A07 PASS  B: V0!=V1!=V2=V3 (2 strict sweeps, 3 total = D+1); H never settles
+    A08 PASS  H: 7 beneficial cycles on {2,3,5}, min g_loop=7/4; thresholds 49/16,133/64,77/32; all other components clean
+    A09 PASS  J table: pipeline == hand == DFS oracle == master, inf at 15,16
+    A10 PASS  SolveCore == brute force == (3.5, 2.375, 2.75) on H
+    A11 PASS  V table exact; gap set = {2,3,4,5,13,14}
+    A12 PASS  VI/PI/Floyd improper = [2, 3, 4, 5, 13, 14] (6 states); master improper = 0
+    A13 PASS  monotone nonincreasing, >= V*; greedy sets stable from k0(VI)=4, k0(Floyd)=3
+    A14 PASS  closed-loop cost of mu* equals J_lambda* at all 14 states
+    A15 PASS  beneficial at 3/4, not at 7/9; bracket [0.767591879244, 0.767591879244] contains (1+sqrt(13))/6
+    A16 PASS  50 finite values, all denominators powers of 2
+
+  outputs: exp14_ex1_n4_table.tex, ex1_n4_stg.pdf, ex1_n4_threshold.pdf
+  ALL 16 ASSERTIONS PASSED

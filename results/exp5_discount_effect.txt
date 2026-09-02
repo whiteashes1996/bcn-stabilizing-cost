@@ -1,0 +1,6 @@
+E5: Discount trajectory effect
+  undiscounted optimal from B: P_rush_early_expensive, J=51.0000
+  lambda=0.05: P2_late_expensive, J=3.5000  (defer expensive wins)
+  lambda=0.995: P2_late_expensive, J=50.7500
+  Note: on this toy graph P_defer (1+50*lambda) beats P_rush for all lambda in (0,1)
+  ASSERTIONS PASSED

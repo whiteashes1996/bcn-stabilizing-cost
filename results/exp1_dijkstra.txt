@@ -1,0 +1,6 @@
+E1: Dijkstra counterexample (lambda=0.5)
+  J*(A) = 100.0000  (expected 100)
+  J*(B) = 51.0000  (expected 51, via expensive A)
+  reverse Dijkstra J(B) = 60.0000  (wrong: 60)
+  label-correcting J(B) = 51.0000  (correct: 51)
+  ASSERTIONS PASSED

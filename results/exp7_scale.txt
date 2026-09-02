@@ -1,0 +1,8 @@
+E7: polynomial branch on easy synthetic BCNs
+  n=4..13, m=2, seeds=(0, 1, 2), lambda=0.5
+  30 instances, all easy, all feedbacks proper, V=J everywhere
+  N from 16 to 8192
+  bound |E|+M|X_s|D from 128 to 65,536
+  runtime from 0.0002s to 0.1168s
+  log-log slope of runtime against the bound: 1.03
+  ASSERTIONS PASSED

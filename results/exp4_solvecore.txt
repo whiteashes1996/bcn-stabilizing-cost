@@ -1,0 +1,21 @@
+E4: SolveCore validation
+  E4a: 308 point checks, mismatches=0
+  E4b: scaling to |S|=20, max time=0.4566s
+    |S|   (state,subset) pairs   dict (s)   bitmask (s)   agree
+    5     80                      0.0001      0.0005   True
+    6     192                     0.0002      0.0007   True
+    7     448                     0.0005      0.0012   True
+    8     1024                    0.0016      0.0014   True
+    9     2304                    0.0028      0.0018   True
+    10    5120                    0.0064      0.0025   True
+    11    11264                   0.0149      0.0033   True
+    12    24576                   0.0367      0.0044   True
+    13    53248                   0.0830      0.0055   True
+    14    114688                  0.1832      0.0076   True
+    15    245760                  0.4096      0.0116   True
+    16    524288                  0.8841      0.0197   True
+    17    1114112               -      0.0477   -
+    18    2359296               -      0.1141   -
+    19    4980736               -      0.2271   -
+    20    10485760              -      0.4566   -
+  ASSERTIONS PASSED

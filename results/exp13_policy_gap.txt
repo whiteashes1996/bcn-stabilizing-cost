@@ -1,0 +1,33 @@
+E13: pointwise optimal values, no jointly optimal feedback
+
+  E13a: two-state component, lam=0.5, internal arcs 0.01, e=1.5
+    x=1: J*=0.7600  stored arc=('internal', 0, 2)
+    x=2: J*=0.7600  stored arc=('internal', 0, 1)
+    both implementations agree with brute force; states trapped in S: [1, 2]
+    best stationary feedback still leaves 1 state(s) above the optimum, by 0.7400
+    in-tree fallback is proper everywhere, at values x=1: 1.5000 (+0.7400), x=2: 0.7600 (+0.0000)
+
+  E13b: random beneficial-cycle components (20 seeds each)
+    |S|   instances   first-arc reading trapped   trapped states
+    4     20          20                         80
+    5     20          20                         100
+    6     20          20                         120
+    7     20          20                         140
+    8     20          20                         160
+    the in-tree fallback is proper on all of them, worst excess over the optimum 9.9219
+
+  E13c: all stationary feedbacks enumerated
+    |S|   seed   states above optimum   worst excess
+    4     0      3                      8.6763
+    4     1      3                      8.7277
+    4     2      3                      8.3029
+    4     3      3                      8.5273
+    4     4      3                      8.5566
+    4     5      3                      8.4507
+    5     0      4                      8.8878
+    5     1      4                      8.8474
+    5     2      4                      8.6072
+    5     3      4                      9.0824
+    5     4      4                      9.0972
+    5     5      4                      9.2483
+  ASSERTIONS PASSED

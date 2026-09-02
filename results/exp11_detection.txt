@@ -1,0 +1,61 @@
+E11: deciding the beneficial-cycle predicate of Algorithm 1
+
+  Part A: criteria (D) definition, (W) V*<J*, (P) tight-arc
+          reachability, (T) sweep count -- all in exact arithmetic
+    random augmented components tested: 560
+      carrying a beneficial cycle: 204
+      beneficial-cycle free:       356
+    instances where the four verdicts differ: 0
+
+  Part B: float vs exact arithmetic for the sweep test (T)
+    family: ring of |S| states, exit weight 50.0 everywhere, cheap
+    self-loop (eps=0.05) at state 1; the cycle is always beneficial
+    lambda   estimated breakdown   first |S| where float (T) misses it
+     0.50     50                    46
+     0.80     149                   136
+     0.90     307                   none up to |S|=240
+
+    lambda  |S|   float (T)   exact (T)   (P)   sweeps (float)
+     0.50    20    True        True        True  20
+     0.50    40    True        True        True  40
+     0.50    60    False       True        True  46
+     0.50    80    False       True        True  46
+     0.50    100   False       True        True  46
+     0.50    120   False       True        True  46
+     0.50    140   False       True        True  46
+     0.50    160   False       True        True  46
+     0.50    180   False       True        True  46
+     0.50    200   False       True        True  46
+     0.50    220   False       True        True  46
+     0.50    240   False       True        True  46
+     0.80    20    True        True        True  20
+     0.80    40    True        True        True  40
+     0.80    60    True        True        True  60
+     0.80    80    True        True        True  80
+     0.80    100   True        True        True  100
+     0.80    120   True        True        True  120
+     0.80    140   False       True        True  136
+     0.80    160   False       True        True  136
+     0.80    180   False       True        True  136
+     0.80    200   False       True        True  136
+     0.80    220   False       True        True  136
+     0.80    240   False       True        True  136
+     0.90    20    True        True        True  20
+     0.90    40    True        True        True  40
+     0.90    60    True        True        True  60
+     0.90    80    True        True        True  80
+     0.90    100   True        True        True  100
+     0.90    120   True        True        True  120
+     0.90    140   True        True        True  140
+     0.90    160   True        True        True  160
+     0.90    180   True        True        True  180
+     0.90    200   True        True        True  200
+     0.90    220   True        True        True  220
+     0.90    240   True        True        True  240
+
+  Conclusion: the four criteria are interchangeable in exact
+  arithmetic; in floating point the sweep test needs the residual
+  lambda^{|S|} to stay above the unit roundoff, which is why
+  Algorithm 1 decides the predicate through criterion (P) instead.
+  figure: detect_precision.pdf
+  ASSERTIONS PASSED

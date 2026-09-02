@@ -1,0 +1,5 @@
+tag,size,coverage,t_milp_s,agree_core,agree_dfs,bounds_ok,certified
+B-lac-restricted,34,1.0,3.501,,,True,34
+A-tlgl,20,1.0,1.301,True,,True,20
+C-mcc-cycle,14,1.0,0.402,True,True,True,14
+ara-restricted,19,1.0,0.768,True,,True,19

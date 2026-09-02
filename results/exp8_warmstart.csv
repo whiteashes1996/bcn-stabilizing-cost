@@ -1,0 +1,16 @@
+case,N,path,t_cold_s,t_warm_s,speedup,sweeps_cold,sweeps_warm,eval_cold,eval_warm
+ara_operon,512,LC_warmstart,0.00046,0.00048,0.951,405,405,,
+synthetic_n8,256,LC_warmstart,0.00015,0.00016,0.955,255,255,,
+synthetic_n9,512,LC_warmstart,0.00033,0.00033,0.973,511,511,,
+synthetic_n10,1024,LC_warmstart,0.00063,0.00067,0.952,1023,1023,,
+synthetic_n11,2048,LC_warmstart,0.00127,0.0013,0.971,2047,2047,,
+synthetic_n12,4096,LC_warmstart,0.00248,0.00255,0.974,4095,4095,,
+beneficial_S8,8,SolveCore_bound,0.00127,0.00112,1.134,,,1024,1024
+beneficial_S9,9,SolveCore_bound,0.00285,0.00274,1.042,,,2304,2304
+beneficial_S10,10,SolveCore_bound,0.0066,0.00599,1.102,,,5120,5120
+beneficial_S11,11,SolveCore_bound,0.01703,0.02074,0.821,,,11264,11264
+beneficial_S12,12,SolveCore_bound,0.03422,0.03117,1.098,,,24576,24576
+beneficial_S13,13,SolveCore_bound,0.08885,0.08333,1.066,,,53248,53248
+beneficial_S14,14,SolveCore_bound,0.22988,0.18019,1.276,,,114688,114688
+beneficial_S15,15,SolveCore_bound,0.47416,0.44026,1.077,,,245760,245760
+beneficial_S16,16,SolveCore_bound,1.11281,0.94801,1.174,,,524288,524288

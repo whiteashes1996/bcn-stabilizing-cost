@@ -1,0 +1,53 @@
+E9: ara operon with a side-effect-aware cost (N=512, M=16, xe=delta_512^512, ue=delta_16^11, lambda=0.5)
+  decoy: x_d = delta_512^9, held by u = delta_16^2, maintenance cost eps = 0.05
+
+  (0) natural Hamming cost, all inputs available
+      |R| = 512/512, components = 405, max = 108
+      beneficial-cycle components = 0; V != J states = 0; VI improper = 0
+
+  (i) side-effect-aware cost, all inputs available
+      components = 405, max = 108
+      beneficial-cycle components = [(107, 3)] (size, trapped)
+      VI improper states = 6: [9, 25, 137, 153, 265, 281]
+      exact SolveCore: Beneficial-cycle SCC |S|=107 exceeds exact SolveCore limit 20; use the depth-parametrized route.
+      detection on that component (|S|=107):
+        Lemma detect, tight arcs in double precision: verdict=True, 3 trapped states, 0.004s
+        sweep count, exact rational: 107 sweeps, verdict=True, 0.174s; the decrease at sweep |S|-1 is 2.810e-31
+        sweep count, double precision: reports a fixed point at sweep 46, verdict=False, 0.019s
+
+  (ii) side-effect-aware cost, actuation restricted to C_u = {delta_16^2, delta_16^11}
+      |R| = 512/512, components = 493, max = 20
+      beneficial-cycle components = [(19, [9, 281])]
+      VI improper states = 6: [9, 25, 137, 153, 265, 281]
+      master improper states = 0, runtime = 0.135s
+      V*(x_d) = 0.1000 = eps/(1-lambda);  J*(x_d) = 11.3750
+      V != J states = 6: [9, 25, 137, 153, 265, 281]
+
+  state      V_lambda*   J_lambda*   status
+    d_512^9       0.1000   11.3750   VI parks it on the decoy
+    d_512^25      8.0500   10.3750   VI parks it on the decoy
+    d_512^137     8.0500   10.3750   VI parks it on the decoy
+    d_512^153     7.0500    9.3750   VI parks it on the decoy
+    d_512^265     8.0500   10.3750   VI parks it on the decoy
+    d_512^281     7.0500    9.3750   VI parks it on the decoy
+
+  vanishing discount: eps/(1-lambda) = J_lambda*(x_d) at lambda = 0.997052; above it the self-loop is no longer beneficial and V* = J* again
+  lambda   V!=J   VI improper   V*(x_d)    J*(x_d)
+   0.1000  1      1                0.0556    8.5310
+   0.3000  6      6                0.0714    9.7970
+   0.5000  6      6                0.1000   11.3750
+   0.7000  6      6                0.1667   13.3130
+   0.9000  6      6                0.5000   15.6590
+   0.9500  6      6                1.0000   16.3149
+   0.9800  6      6                2.5000   16.7224
+   0.9900  6      6                5.0000   16.8606
+   0.9950  1      1               10.0000   16.9301
+   0.9956  1      1               11.3636   16.9385
+   0.9970  1      1               16.6667   16.9581
+   0.9975  0      0               16.9650   16.9650
+   0.9980  0      0               16.9720   16.9720
+   0.9990  0      0               16.9860   16.9860
+   0.9995  0      0               16.9930   16.9930
+
+  figures: ara_decoy_stg.pdf, ara_decoy_lambda.pdf
+  ASSERTIONS PASSED

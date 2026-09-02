@@ -1,0 +1,12 @@
+Large-scale run at 2026-07-07T22:03:26.085964
+
+=== exp6_scale_real ===
+OK: {'rows': 22, 'csv': '/Users/whiteashes/科研论文/镇定最小代价/simulations/results/exp6_real_networks.csv'}
+
+=== exp7_scale_synthetic ===
+OK: {'rows': 27, 'csv': '/Users/whiteashes/科研论文/镇定最小代价/simulations/results/exp7_scale.csv'}
+
+=== exp8_dijkstra_warmstart ===
+OK: {'rows': 15}
+
+Total failed: 0

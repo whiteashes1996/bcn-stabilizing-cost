@@ -1,0 +1,9 @@
+E2: Beneficial cycle (lambda=0.5, 3-cycle + exit e=100)
+  g_loop(C) = 1.7500
+  V_lambda*(y) = 2.0000  (expected 2, VI lasso)
+  J_lambda*(y) = 26.5000  (expected 26.5, proper)
+  SolveCore J(y) = 26.5000
+  brute-force J(y) = 26.5000
+  beneficial: 1.7500 < 23.1875 = 23.1875
+  VI greedy proper at y? False, traj length=4
+  ASSERTIONS PASSED

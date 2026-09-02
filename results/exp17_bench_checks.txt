@@ -1,0 +1,16 @@
+exp17 bench-level checks (B5-B9)
+passed: 40  failed: 0
+key numbers:
+  B5 slope core=12: linear-part 1.219, raw total 1.211 (top 3 sizes)
+  B5 t_core core=12: median over N = [0.0002668, 0.0004868] s (max/min 1.82)
+  B5 slope core=16: linear-part 1.196, raw total 1.127 (top 3 sizes)
+  B5 t_core core=16: median over N = [0.005541, 0.006518] s (max/min 1.18)
+  B5 slope core=20: linear-part 1.203, raw total 0.637 (top 3 sizes)
+  B5 t_core core=20: median over N = [0.114, 0.1168] s (max/min 1.03)
+  B5 t_core(20)/t_core(12) = 312.5 (theory ~2^8*20/12)
+  a' t_core per core: {1: 0.005544291692785919, 2: 0.00556500002858229, 4: 0.005569312488660216, 8: 0.005471187498187646} (max/min 1.02)
+  B6 k_vi slope vs 1/(1-lam): 1.027; k_vi=[31.0, 185.0, 1995.0, 20084.0, 200846.0]; k_pi=[6.0, 6.0, 6.0, 6.0, 6.0]
+  B6 t_master across lambda: max/min=1.04
+  B7 DFS all-timeout from N*=1024; per-N ok counts: {16:5, 32:5, 64:5, 128:5, 256:5, 512:2, 1024:0, 2048:0, 4096:0}
+  B8 tlgl medians: t_master=0.288 t_vi=0.014 k_vi=23 stages: {'t_reach': 0.0005, 't_scc': 0.0012, 't_fold': 0.0016, 't_sweep': 0.0009, 't_detect': 0.0046, 't_core': 0.2672, 't_recover': 0.0088}
+RESULT: PASS

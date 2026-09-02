@@ -1,0 +1,13 @@
+E3: ara operon pipeline (N=512, M=16, xe=512, ue=11, lambda=0.5)
+  Boolean rules of Table ara-rules verified against L: 73728 node evaluations, 9 nodes
+  control fixpoints: 9
+  |R| = 512 / 512, D_reach = 3
+  SCC count = 405, max SCC size = 108
+  SCC size distribution (size: count) = {1: 404, 108: 1}
+  beneficial-cycle SCCs: 0 []
+  V!=J states: 0 / 512
+  VI non-proper states: 0 / 512
+  master non-proper states: 0 / 512
+  sample J(1)=11.6250, V(1)=11.6250
+  ASSERTIONS: master all proper expected
+  ASSERTIONS PASSED

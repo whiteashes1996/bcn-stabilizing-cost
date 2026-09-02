@@ -1,0 +1,14 @@
+E12: depth-parametrized route
+  E12a: 32 random components, mismatches=0, below-exact=0, monotonicity breaks=0
+        depth at which J^(D) meets the exact optimum: min=4, max=7, mean=5.50
+  E12b: ara carrier |S|=107, internal out-degree max=16, mean=15.33
+        trapped states: [9, 265, 281]
+         D   expansions      time (s)   J(decoy)     J(worst)  unreached  improper
+         1         1,732       0.000          inf     9.000000         27        60
+         2        25,369       0.005    11.500000    11.500000          0        27
+         3       355,624       0.071    11.375000    11.375000          0         0
+         4     4,818,996       0.992    11.375000    11.375000          0         0
+         5    63,673,686      13.304    11.375000    11.375000          0         0
+        proper feedback at all 107 states from D=3
+        settles at J^(D)=11.375 from D=3, matching the exact SolveCore value of the restricted-actuation regime
+  ASSERTIONS PASSED

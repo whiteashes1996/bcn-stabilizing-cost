@@ -1,0 +1,18 @@
+E8: Dijkstra warm-start
+  rows: 15
+  ara_operon LC_warmstart: cold=0.00046s warm=0.00048s speedup=0.951
+  synthetic_n8 LC_warmstart: cold=0.00015s warm=0.00016s speedup=0.955
+  synthetic_n9 LC_warmstart: cold=0.00033s warm=0.00033s speedup=0.973
+  synthetic_n10 LC_warmstart: cold=0.00063s warm=0.00067s speedup=0.952
+  synthetic_n11 LC_warmstart: cold=0.00127s warm=0.0013s speedup=0.971
+  synthetic_n12 LC_warmstart: cold=0.00248s warm=0.00255s speedup=0.974
+  beneficial_S8 SolveCore_bound: cold=0.00127s warm=0.00112s speedup=1.134
+  beneficial_S9 SolveCore_bound: cold=0.00285s warm=0.00274s speedup=1.042
+  beneficial_S10 SolveCore_bound: cold=0.0066s warm=0.00599s speedup=1.102
+  beneficial_S11 SolveCore_bound: cold=0.01703s warm=0.02074s speedup=0.821
+  beneficial_S12 SolveCore_bound: cold=0.03422s warm=0.03117s speedup=1.098
+  beneficial_S13 SolveCore_bound: cold=0.08885s warm=0.08333s speedup=1.066
+  beneficial_S14 SolveCore_bound: cold=0.22988s warm=0.18019s speedup=1.276
+  beneficial_S15 SolveCore_bound: cold=0.47416s warm=0.44026s speedup=1.077
+  beneficial_S16 SolveCore_bound: cold=1.11281s warm=0.94801s speedup=1.174
+  ASSERTIONS PASSED

@@ -1,0 +1,34 @@
+E10: three-node BCN, N=8, M=2, xe=delta_8^1, ue=delta_2^1, lambda=0.5
+  L = delta_8[1 3 2 5 1 5 5 1 1 8 2 5 1 5 5 1]
+  g(x,u) = Hamming(x, x_e) + [u != u_e]
+
+  logical form:
+    x1(t+1) = (x2 & x3) | (~x1 & ~x2 & ~x3) | (x1 & x3) | (u & x1 & x2)
+    x2(t+1) = ~x2 | ~x1 | x3
+    x3(t+1) = ~x1 | (~x2 & ~x3) | (x2 & x3) | (u & ~x3)
+
+  |X_s| = 8 / 8,  components = 7,  nontrivial = 1 (S* = [2, 3])
+  downstream folding: e(delta_8^2) = 3.5, e(delta_8^3) = inf
+  beneficial-cycle test: True, trapped = [2, 3]
+  criterion: g_loop(C) = 1.5000 < (1-lambda^2) J(delta_8^2) = 2.6250
+  cycle oracle: 3 beneficial cycle(s) [[2, 3, 2], [3, 2, 3], [2, 3, 2]]
+
+  state  bits     d  V_lambda*  J_lambda*   VI     PI     master
+  d_8^1  (111)  0     0.0000    0.0000   u=-   u=-   u=1
+  d_8^2  (110)  1     2.0000    3.5000   u=1   u=1   u=2
+  d_8^3  (101)  1     2.0000    2.7500   u=1   u=1   u=1
+  d_8^4  (100)  2     2.5000    2.5000   u=1   u=1   u=1
+  d_8^5  (011)  1     1.0000    1.0000   u=1   u=1   u=1
+  d_8^6  (010)  2     2.5000    2.5000   u=1   u=1   u=1
+  d_8^7  (001)  2     2.5000    2.5000   u=1   u=1   u=1
+  d_8^8  (000)  3     3.0000    3.0000   u=1   u=1   u=1
+
+  V != J states: [2, 3]
+  value-iteration improper states:  [2, 3]
+  policy-iteration improper states: [2, 3]
+  master improper states:           []
+  SolveCore J = {2: 3.5, 3: 2.75}, brute force agrees
+
+  beneficial-cycle threshold: bisection 0.767591879, closed form (1+sqrt(13))/6 = 0.767591879
+  figures: toy_bcn_stg.pdf, toy_bcn_threshold.pdf
+  ASSERTIONS PASSED

@@ -1,0 +1,10 @@
+E18: exhaustive enumeration of all stationary feedbacks on Example 1 (N=16, M=2, lambda=1/2)
+  L parsed from results/exp14_ex1_n4.txt; feedbacks enumerated: 65536 (= 2^16); exact Fractions throughout
+  value semantics: W = plain discounted closed-loop cost; Jt = W if the orbit reaches x_e, else infinity (stabilization semantics)
+
+  A18-0 PASS  pointwise min of W over all feedbacks == V_lambda* table; pointwise min of Jt == J_lambda* table; no feedback proper at 15 or 16
+  A18-a PASS  no feedback attains V_lambda*=2 pointwise on H={2,3,5} in stabilization semantics (count = 0); 8192 feedbacks attain plain cost 2 pointwise on H and every one is improper at all of H (trapped in the cycle 2->3->5->2)
+  A18-b PASS  max #states of V_s where the stabilization value equals V_lambda*: 8 of 14 (exactly the non-gap states; none of the 6 gap states [2, 3, 4, 5, 13, 14] is attainable); feedbacks attaining the maximum: 256
+  A18-c PASS  the feedback recovered by Algorithm master (u=2 at states 2 and 10, u=1 elsewhere on V_s) attains J_lambda* pointwise on all 14 states of V_s and is proper at every state of V_s
+
+  ALL EXP18 ASSERTIONS PASSED
