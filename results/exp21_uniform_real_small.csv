@@ -1,0 +1,8 @@
+config,|S|,solver,coverage,t_core_s,joint,s*,h*,T0_excess,sandwich_ub
+T-LGL (natural cost),20,held-karp,1.0,10.197,True,0.0,3,0.0,0.0
+T-LGL (natural cost),20,held-karp,1.0,10.079,True,0.0,3,0.0,0.0
+T-LGL (decoy),20,held-karp,1.0,10.18,True,0.0,3,0.0,0.0
+T-LGL (decoy),20,held-karp,1.0,10.768,True,0.0,3,0.0,0.0
+mammalian cell cycle (decoy),14,held-karp,1.0,0.05,False,2.45,8,2.45,4.880859
+"ara, restricted inputs (decoy)",19,held-karp,1.0,2.241,True,0.0,4,0.0,0.0
+"lac, restricted inputs (decoy)",34,milp,1.0,4.221,True,0.0,3,0.0,0.0

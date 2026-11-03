@@ -1,0 +1,12 @@
+# Example 1 STG layout comparison
+- [01 custom (condensation layers + lane bands)](ex1_stg_01_custom.pdf)
+- [02 multipartite_layout (condensation DAG)](ex1_stg_02_multipartite.pdf)
+- [03 topological_generations (dot-like, NetworkX)](ex1_stg_03_topological_generations.pdf)
+- [04 fruchterman_reingold (neato-like, condensation)](ex1_stg_04_spring_fr.pdf)
+- [05 spring_layout (condensation super-graph)](ex1_stg_05_spring_condensation.pdf)
+- [06 kamada_kawai_layout (condensation)](ex1_stg_06_kamada_condensation.pdf)
+- [07 spectral_layout (condensation, undirected)](ex1_stg_07_spectral_condensation.pdf)
+- [08 shell_layout (condensation layer = shell)](ex1_stg_08_shell_condensation.pdf)
+- [09 spring_layout (full state graph)](ex1_stg_09_spring_full.pdf)
+- [10 kamada_kawai_layout (full state graph)](ex1_stg_10_kamada_full.pdf)
+- [11 multipartite_layout (each state, SCC layer)](ex1_stg_11_multipartite_states.pdf)

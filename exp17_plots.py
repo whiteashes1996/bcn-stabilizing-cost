@@ -2,11 +2,13 @@
 """exp17 plots + curve-level acceptance checks (B5-B9 machine assertions).
 
 Reads only the bench CSVs (H2: no hand-written numbers) and produces:
-  results/exp17_scale.{pdf,png}    curve (a): t_master vs N, t_core isolation
-  results/exp17_lambda.{pdf,png}   curve (b): k_vi ~ 1/(1-lambda), master flat
-  results/exp17_methods.{pdf,png}  curve (c): all five methods on shared graphs
-  results/exp17_tables.tex         T-LGL row + N=2^20 stage breakdown rows
-  results/exp17_bench_checks.txt   B5-B9 verdicts
+  results/exp17_scale_total.{pdf,png}  curve (a): t_total vs N
+  results/exp17_scale_core.{pdf,png}   curve (a): t_core flat in N
+  results/exp17_lambda.{pdf,png}       curve (b): k_vi ~ 1/(1-lambda), master flat
+  results/exp17_methods.{pdf,png}      curve (c): all five methods on shared graphs
+  results/exp17_tables.tex             T-LGL row + N=2^20 stage breakdown rows
+  results/exp17_bench_checks.txt       B5-B9 verdicts
+  Also copies scale figures to figures/perf_scale_{total,core}.pdf.
 
 B8's J-table comparison (C++ vs methods.py floating(1e-9) on T-LGL) runs here
 too, against the result dump written by `bcn bench --curve tlgl --dump ...`.
@@ -16,6 +18,7 @@ from __future__ import annotations
 import csv
 import math
 import os
+import shutil
 import sys
 from statistics import median
 from typing import Dict, List, Tuple
@@ -249,9 +252,14 @@ def main() -> int:
 
     # ---------------- figures -------------------------------------------------
     plt.rcParams.update({"font.size": 9, "figure.dpi": 140})
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9.2, 3.6))
     colors = {12: "#1a7f37", 16: "#1f6feb", 20: "#d1495b"}
+    FIG = os.path.join(HERE, "..", "figures")
+    # Shared canvas so t_total / t_core PDFs match in print size (no tight crop).
+    SCALE_FIGSIZE = (5.2, 3.35)
+    SCALE_MARGINS = dict(left=0.15, right=0.98, bottom=0.15, top=0.88)
+
+    # t_total vs N (single-column)
+    fig, ax1 = plt.subplots(figsize=SCALE_FIGSIZE)
     for core in cores:
         xs = ns
         md = [med(ga[(core, N)], "t_master") for N in xs]
@@ -266,22 +274,38 @@ def main() -> int:
     ax1.set_xscale("log", base=2)
     ax1.set_yscale("log")
     ax1.set_xlabel("N")
-    ax1.set_ylabel("wall time [s]")
-    ax1.set_title("(a) total time vs N (median, min-max over 5 seeds)")
-    ax1.legend(fontsize=7)
+    ax1.set_ylabel(r"$t_{\mathrm{total}}$ [s]")
+    ax1.set_title(r"$t_{\mathrm{total}}$ vs $N$ (median, min--max over 5 seeds)")
+    ax1.legend(fontsize=7, loc="lower right")
+    fig.subplots_adjust(**SCALE_MARGINS)
+    for ext in ("pdf", "png"):
+        fig.savefig(os.path.join(RES, f"exp17_scale_total.{ext}"),
+                    bbox_inches=None, pad_inches=0)
+    plt.close(fig)
+
+    # t_core vs N (single-column)
+    fig, ax2 = plt.subplots(figsize=SCALE_FIGSIZE)
     for core in cores:
         tc = [med(ga[(core, N)], "t_core") for N in ns]
         ax2.plot(ns, tc, "o-", color=colors[core], label=f"SolveCore, |S|={core}")
     ax2.set_xscale("log", base=2)
     ax2.set_yscale("log")
     ax2.set_xlabel("N")
-    ax2.set_ylabel("t_core [s]")
-    ax2.set_title("(a) exponential part isolated: t_core flat in N")
-    ax2.legend(fontsize=7)
-    fig.tight_layout()
+    ax2.set_ylabel(r"$t_{\mathrm{core}}$ [s]")
+    ax2.set_title(r"$t_{\mathrm{core}}$ flat in $N$")
+    ax2.legend(fontsize=7, loc="center right")
+    fig.subplots_adjust(**SCALE_MARGINS)
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(RES, f"exp17_scale.{ext}"))
+        fig.savefig(os.path.join(RES, f"exp17_scale_core.{ext}"),
+                    bbox_inches=None, pad_inches=0)
     plt.close(fig)
+
+    # Copy paper figures
+    for src, dst in (
+        ("exp17_scale_total.pdf", "perf_scale_total.pdf"),
+        ("exp17_scale_core.pdf", "perf_scale_core.pdf"),
+    ):
+        shutil.copy2(os.path.join(RES, src), os.path.join(FIG, dst))
 
     fig, ax = plt.subplots(figsize=(5.4, 3.6))
     ax.plot(inv, kvi, "o-", color="#d1495b", label="VI sweeps k(1e-6)")

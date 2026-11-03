@@ -1,0 +1,13 @@
+E21 (small): lambda=0.5, floating(1e-9), MILP limit 60.0s/source
+  {'config': 'T-LGL (natural cost)', '|S|': 20, 'solver': 'held-karp', 'coverage': 1.0, 't_core_s': 10.197, 'joint': True, 's*': 0.0, 'h*': 3, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+  {'config': 'T-LGL (natural cost)', '|S|': 20, 'solver': 'held-karp', 'coverage': 1.0, 't_core_s': 10.079, 'joint': True, 's*': 0.0, 'h*': 3, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+  {'config': 'T-LGL (decoy)', '|S|': 20, 'solver': 'held-karp', 'coverage': 1.0, 't_core_s': 10.18, 'joint': True, 's*': 0.0, 'h*': 3, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+  {'config': 'T-LGL (decoy)', '|S|': 20, 'solver': 'held-karp', 'coverage': 1.0, 't_core_s': 10.768, 'joint': True, 's*': 0.0, 'h*': 3, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+  {'config': 'mammalian cell cycle (decoy)', '|S|': 14, 'solver': 'held-karp', 'coverage': 1.0, 't_core_s': 0.05, 'joint': False, 's*': 2.45, 'h*': 8, 'T0_excess': 2.45, 'sandwich_ub': 4.880859}
+  {'config': 'ara, restricted inputs (decoy)', '|S|': 19, 'solver': 'held-karp', 'coverage': 1.0, 't_core_s': 2.241, 'joint': True, 's*': 0.0, 'h*': 4, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+  {'config': 'lac, restricted inputs (decoy)', '|S|': 34, 'solver': 'milp', 'coverage': 1.0, 't_core_s': 4.221, 'joint': True, 's*': 0.0, 'h*': 3, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+  SUMMARY {'config': 'T-LGL (natural cost)', '|V_s|': 65536, 'gap': 1216, 'union_SB': 40, 'complete': True, 't_walk_s': 21.33, 'realized_excess': 0.0, 'max_s*': 0.0, 'joint_global': True}
+  SUMMARY {'config': 'T-LGL (decoy)', '|V_s|': 65536, 'gap': 1240, 'union_SB': 40, 'complete': True, 't_walk_s': 21.89, 'realized_excess': 0.0, 'max_s*': 0.0, 'joint_global': True}
+  SUMMARY {'config': 'mammalian cell cycle (decoy)', '|V_s|': 512, 'gap': 234, 'union_SB': 14, 'complete': True, 't_walk_s': 0.05, 'realized_excess': 2.45, 'max_s*': 2.45, 'joint_global': False}
+  SUMMARY {'config': 'ara, restricted inputs (decoy)', '|V_s|': 512, 'gap': 6, 'union_SB': 19, 'complete': True, 't_walk_s': 2.24, 'realized_excess': 0.0, 'max_s*': 0.0, 'joint_global': True}
+  SUMMARY {'config': 'lac, restricted inputs (decoy)', '|V_s|': 1024, 'gap': 6, 'union_SB': 34, 'complete': True, 't_walk_s': 4.23, 'realized_excess': 0.0, 'max_s*': 0.0, 'joint_global': True}

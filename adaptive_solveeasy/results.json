@@ -1,0 +1,426 @@
+{
+  "brute": {
+    "trials": 4200,
+    "beneficial": 1526,
+    "clean": 2674,
+    "fallback_without_cycle": 46
+  },
+  "lambda1_random": [
+    {
+      "n": 40,
+      "trials": 200,
+      "extra": 80,
+      "max_sweeps": 9
+    },
+    {
+      "n": 120,
+      "trials": 80,
+      "extra": 240,
+      "max_sweeps": 12
+    },
+    {
+      "n": 400,
+      "trials": 30,
+      "extra": 800,
+      "max_sweeps": 13
+    }
+  ],
+  "discounted": [
+    {
+      "name": "appendix gadget",
+      "n": 2,
+      "fallback": true,
+      "has_cycle": false
+    },
+    {
+      "name": "path toward the sink",
+      "n": 50,
+      "fallback": false,
+      "has_cycle": false
+    },
+    {
+      "name": "path toward the sink",
+      "n": 400,
+      "fallback": false,
+      "has_cycle": false
+    },
+    {
+      "name": "path toward the sink",
+      "n": 2000,
+      "fallback": false,
+      "has_cycle": false
+    },
+    {
+      "name": "disjoint gadgets",
+      "n": 20,
+      "fallback": true,
+      "has_cycle": false
+    },
+    {
+      "name": "disjoint gadgets",
+      "n": 200,
+      "fallback": true,
+      "has_cycle": false
+    }
+  ],
+  "scaling": {
+    "path": [
+      {
+        "family": "path",
+        "n": 50,
+        "m": 49,
+        "sync_sweeps": 50,
+        "sync_scans": 2450,
+        "heap_extracts": 50,
+        "heap_scans": 49,
+        "heap_cmp": 0,
+        "sync_sec": 0.00024916703114286065,
+        "heap_sec": 1.745804911479354e-05
+      },
+      {
+        "family": "path",
+        "n": 100,
+        "m": 99,
+        "sync_sweeps": 100,
+        "sync_scans": 9900,
+        "heap_extracts": 100,
+        "heap_scans": 99,
+        "heap_cmp": 0,
+        "sync_sec": 0.001061959017533809,
+        "heap_sec": 3.466696944087744e-05
+      },
+      {
+        "family": "path",
+        "n": 200,
+        "m": 199,
+        "sync_sweeps": 200,
+        "sync_scans": 39800,
+        "heap_extracts": 200,
+        "heap_scans": 199,
+        "heap_cmp": 0,
+        "sync_sec": 0.004337667021900415,
+        "heap_sec": 6.645801477134228e-05
+      },
+      {
+        "family": "path",
+        "n": 400,
+        "m": 399,
+        "sync_sweeps": 400,
+        "sync_scans": 159600,
+        "heap_extracts": 400,
+        "heap_scans": 399,
+        "heap_cmp": 0,
+        "sync_sec": 0.01780145801603794,
+        "heap_sec": 0.00013920903438702226
+      },
+      {
+        "family": "path",
+        "n": 800,
+        "m": 799,
+        "sync_sweeps": 800,
+        "sync_scans": 639200,
+        "heap_extracts": 800,
+        "heap_scans": 799,
+        "heap_cmp": 0,
+        "sync_sec": 0.07228095905156806,
+        "heap_sec": 0.0003321659751236439
+      },
+      {
+        "family": "path",
+        "n": 1600,
+        "m": 1599,
+        "sync_sweeps": 1600,
+        "sync_scans": 2558400,
+        "heap_extracts": 1600,
+        "heap_scans": 1599,
+        "heap_cmp": 0,
+        "sync_sec": 0.29278775001876056,
+        "heap_sec": 0.0006124170031398535
+      },
+      {
+        "family": "path",
+        "n": 3200,
+        "m": 3199,
+        "sync_sweeps": 3200,
+        "sync_scans": 10236800,
+        "heap_extracts": 3200,
+        "heap_scans": 3199,
+        "heap_cmp": 0,
+        "sync_sec": 1.1895458749495447,
+        "heap_sec": 0.0012752090115100145
+      },
+      {
+        "family": "path",
+        "n": 6400,
+        "m": 6399,
+        "sync_sweeps": 6400,
+        "sync_scans": 40953600,
+        "heap_extracts": 6400,
+        "heap_scans": 6399,
+        "heap_cmp": 0,
+        "sync_sec": 4.851005125034135,
+        "heap_sec": 0.002914957993198186
+      }
+    ],
+    "path_noise": [
+      {
+        "family": "path_noise",
+        "n": 50,
+        "m": 99,
+        "sync_sweeps": 50,
+        "sync_scans": 4950,
+        "heap_extracts": 50,
+        "heap_scans": 99,
+        "heap_cmp": 376,
+        "sync_sec": 0.0005600420408882201,
+        "heap_sec": 6.433395901694894e-05
+      },
+      {
+        "family": "path_noise",
+        "n": 100,
+        "m": 199,
+        "sync_sweeps": 100,
+        "sync_scans": 19900,
+        "heap_extracts": 100,
+        "heap_scans": 199,
+        "heap_cmp": 1098,
+        "sync_sec": 0.0020309999817982316,
+        "heap_sec": 0.00011920800898224115
+      },
+      {
+        "family": "path_noise",
+        "n": 200,
+        "m": 399,
+        "sync_sweeps": 200,
+        "sync_scans": 79800,
+        "heap_extracts": 200,
+        "heap_scans": 399,
+        "heap_cmp": 2315,
+        "sync_sec": 0.008540207985788584,
+        "heap_sec": 0.00024929101346060634
+      },
+      {
+        "family": "path_noise",
+        "n": 400,
+        "m": 799,
+        "sync_sweeps": 400,
+        "sync_scans": 319600,
+        "heap_extracts": 400,
+        "heap_scans": 799,
+        "heap_cmp": 6160,
+        "sync_sec": 0.03535079100402072,
+        "heap_sec": 0.0007543330430053174
+      },
+      {
+        "family": "path_noise",
+        "n": 800,
+        "m": 1599,
+        "sync_sweeps": 800,
+        "sync_scans": 1279200,
+        "heap_extracts": 800,
+        "heap_scans": 1599,
+        "heap_cmp": 14199,
+        "sync_sec": 0.1485293330042623,
+        "heap_sec": 0.0016521670040674508
+      },
+      {
+        "family": "path_noise",
+        "n": 1600,
+        "m": 3199,
+        "sync_sweeps": 1600,
+        "sync_scans": 5118400,
+        "heap_extracts": 1600,
+        "heap_scans": 3199,
+        "heap_cmp": 32009,
+        "sync_sec": 0.588605833996553,
+        "heap_sec": 0.0033413749770261347
+      },
+      {
+        "family": "path_noise",
+        "n": 3200,
+        "m": 6399,
+        "sync_sweeps": 3200,
+        "sync_scans": 20476800,
+        "heap_extracts": 3200,
+        "heap_scans": 6399,
+        "heap_cmp": 71628,
+        "sync_sec": 2.5342378329951316,
+        "heap_sec": 0.008554666012059897
+      },
+      {
+        "family": "path_noise",
+        "n": 6400,
+        "m": 12799,
+        "sync_sweeps": 6400,
+        "sync_scans": 81913600,
+        "heap_extracts": 6400,
+        "heap_scans": 12799,
+        "heap_cmp": 157810,
+        "sync_sec": 11.461395124963019,
+        "heap_sec": 0.017205874959472567
+      }
+    ],
+    "star": [
+      {
+        "family": "star",
+        "n": 50,
+        "m": 49,
+        "sync_sweeps": 2,
+        "sync_scans": 98,
+        "heap_extracts": 50,
+        "heap_scans": 49,
+        "heap_cmp": 261,
+        "sync_sec": 1.087499549612403e-05,
+        "heap_sec": 3.362499410286546e-05
+      },
+      {
+        "family": "star",
+        "n": 100,
+        "m": 99,
+        "sync_sweeps": 2,
+        "sync_scans": 198,
+        "heap_extracts": 100,
+        "heap_scans": 99,
+        "heap_cmp": 632,
+        "sync_sec": 2.1291023585945368e-05,
+        "heap_sec": 8.229102240875363e-05
+      },
+      {
+        "family": "star",
+        "n": 200,
+        "m": 199,
+        "sync_sweeps": 2,
+        "sync_scans": 398,
+        "heap_extracts": 200,
+        "heap_scans": 199,
+        "heap_cmp": 1457,
+        "sync_sec": 4.195899236947298e-05,
+        "heap_sec": 0.00017791602294892073
+      },
+      {
+        "family": "star",
+        "n": 400,
+        "m": 399,
+        "sync_sweeps": 2,
+        "sync_scans": 798,
+        "heap_extracts": 400,
+        "heap_scans": 399,
+        "heap_cmp": 3355,
+        "sync_sec": 0.00010441703489050269,
+        "heap_sec": 0.0004305840120650828
+      },
+      {
+        "family": "star",
+        "n": 800,
+        "m": 799,
+        "sync_sweeps": 2,
+        "sync_scans": 1598,
+        "heap_extracts": 800,
+        "heap_scans": 799,
+        "heap_cmp": 7543,
+        "sync_sec": 0.00018375000217929482,
+        "heap_sec": 0.0008944579749368131
+      },
+      {
+        "family": "star",
+        "n": 1600,
+        "m": 1599,
+        "sync_sweeps": 2,
+        "sync_scans": 3198,
+        "heap_extracts": 1600,
+        "heap_scans": 1599,
+        "heap_cmp": 16727,
+        "sync_sec": 0.0003712499747052789,
+        "heap_sec": 0.002055125019978732
+      },
+      {
+        "family": "star",
+        "n": 3200,
+        "m": 3199,
+        "sync_sweeps": 2,
+        "sync_scans": 6398,
+        "heap_extracts": 3200,
+        "heap_scans": 3199,
+        "heap_cmp": 36498,
+        "sync_sec": 0.001085125026293099,
+        "heap_sec": 0.006387750036083162
+      },
+      {
+        "family": "star",
+        "n": 6400,
+        "m": 6399,
+        "sync_sweeps": 2,
+        "sync_scans": 12798,
+        "heap_extracts": 6400,
+        "heap_scans": 6399,
+        "heap_cmp": 79635,
+        "sync_sec": 0.0025573749444447458,
+        "heap_sec": 0.009482708002906293
+      }
+    ]
+  },
+  "path_large": [
+    {
+      "n": 16000,
+      "sec": 0.006886958028189838,
+      "cmp": 0,
+      "scans": 15999
+    },
+    {
+      "n": 32000,
+      "sec": 0.015900957980193198,
+      "cmp": 0,
+      "scans": 31999
+    },
+    {
+      "n": 64000,
+      "sec": 0.029544625023845583,
+      "cmp": 0,
+      "scans": 63999
+    },
+    {
+      "n": 128000,
+      "sec": 0.06637929199496284,
+      "cmp": 0,
+      "scans": 127999
+    },
+    {
+      "n": 256000,
+      "sec": 0.12470408400986344,
+      "cmp": 0,
+      "scans": 255999
+    }
+  ],
+  "star_large": [
+    {
+      "n": 16000,
+      "sec": 0.024548958986997604,
+      "cmp": 220448,
+      "scans": 15999
+    },
+    {
+      "n": 32000,
+      "sec": 0.05156045901821926,
+      "cmp": 472091,
+      "scans": 31999
+    },
+    {
+      "n": 64000,
+      "sec": 0.11496695800451562,
+      "cmp": 1007080,
+      "scans": 63999
+    },
+    {
+      "n": 128000,
+      "sec": 0.24291529197944328,
+      "cmp": 2149490,
+      "scans": 127999
+    },
+    {
+      "n": 256000,
+      "sec": 0.5189933329820633,
+      "cmp": 4557763,
+      "scans": 255999
+    }
+  ]
+}

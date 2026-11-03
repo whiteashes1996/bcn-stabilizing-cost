@@ -588,6 +588,22 @@ COMP_LABEL = {
 }
 
 
+def policy_cell_label(
+    x: int,
+    mu: Dict[int, Tuple[int, int]],
+    xe: int = XE,
+) -> str:
+    """Closed-loop semantic label for Table 1 feedback columns.
+
+    L -- improper (trapped in a non-target cycle);
+    P -- proper (stabilizing closed loop, including the green escape arc).
+    """
+    if x not in mu:
+        return "--"
+    is_proper, _, _ = simulate_closed_loop(f, mu, x, xe, max_steps=4 * N)
+    return "P" if is_proper else "L"
+
+
 def make_table_rows(
     V: Dict[int, Fraction],
     J: Dict[int, Fraction],
@@ -599,19 +615,20 @@ def make_table_rows(
     for x in range(1, N + 1):
         b = "".join(str(t) for t in bits(x))
         if x in (15, 16):
-            # row template wraps each field in $...$; bare \infty avoids $$\infty$$
+            # row template wraps numeric fields in $...$; bare \infty avoids $$\infty$$
             comp, vs, js, kvi, kpi, kmm = "--", "--", "\\infty", "--", "--", "--"
         else:
             comp = COMP_LABEL.get(
                 frozenset(scc.components[scc.comp_of[x]]), "sgl"
             )
             vs, js = fr_dec(V[x]), fr_dec(J[x])
-            kvi = str(mu_vi[x][0]) if x in mu_vi else "--"
-            kpi = str(mu_pi[x][0]) if x in mu_pi else "--"
-            kmm = str(mu_master[x][0]) if x in mu_master else "--"
+            kvi = policy_cell_label(x, mu_vi)
+            kpi = policy_cell_label(x, mu_pi)
+            kmm = policy_cell_label(x, mu_master)
+        # Feedback labels are upright letters L/P, not math.
         lines.append(
             f"$\\delta_{{16}}^{{{x}}}$ & ${b}$ & ${hamming_to_target(x)}$ & {comp}"
-            f" & ${vs}$ & ${js}$ & ${kvi}$ & ${kpi}$ & ${kmm}$ \\\\"
+            f" & ${vs}$ & ${js}$ & {kvi} & {kpi} & {kmm} \\\\"
         )
     lines.append("\\midrule")
     lines.append(
@@ -621,42 +638,315 @@ def make_table_rows(
     return "\n".join(lines)
 
 
-POS = {
-    1: (5.6, 0.0),
-    9: (4.2, 1.1),
-    8: (4.2, -1.3),
-    2: (2.6, -0.7),
-    3: (1.5, -1.7),
-    5: (2.9, -2.0),
-    4: (0.6, -0.9),
-    13: (1.0, -3.0),
-    6: (1.6, 1.7),
-    7: (0.4, 0.9),
-    10: (2.7, 1.5),
-    11: (4.2, 2.3),
-    12: (-1.0, 1.6),
-    14: (-2.0, 0.3),
-    15: (-2.0, -2.2),
-    16: (-0.9, -2.8),
-}
-
 TRAP = "#d1495b"
 GOOD = "#1a7f37"
 FAINT = "#c8ccd0"
 DEAD = "#9aa0a6"
+FIGURES = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "figures"))
 
 
-def _draw_panel(ax, G, mu, title, colour, trapped, highlight=None):
+def _comp_upstream_order(scc) -> List[int]:
+    """Condensation component ids, upstream first and x_e (sink) last."""
+    return list(reversed(scc.reverse_topo))
+
+
+def _scc_visit_order(comp: Set[int], G: WeightedGraph) -> List[int]:
+    """Walk intra-SCC arcs to order nodes; fall back to sorted ids."""
+    if len(comp) <= 1:
+        return sorted(comp)
+    order = [min(comp)]
+    seen = {order[0]}
+    while len(order) < len(comp):
+        cur = order[-1]
+        nxts = sorted(
+            y for _u, y, _w in G.by_state.get(cur, [])
+            if y in comp and y not in seen
+        )
+        if not nxts:
+            break
+        order.append(nxts[0])
+        seen.add(nxts[0])
+    return order if len(order) == len(comp) else sorted(comp)
+
+
+def _scc_internal_offsets(comp: Set[int], G: WeightedGraph, step: float) -> Dict[int, float]:
+    """Place intra-SCC nodes on a vertical chain following cycle/path edges."""
+    nodes = _scc_visit_order(comp, G)
+    n = len(nodes)
+    if n == 1:
+        return {nodes[0]: 0.0}
+    if n == 2:
+        return {nodes[0]: step / 2, nodes[1]: -step / 2}
+    # n >= 3: walk order top -> bottom so forward arcs point downward
+    top = step * (n - 1) / 2
+    return {nd: top - i * step for i, nd in enumerate(nodes)}
+
+
+def _assign_comp_lanes(scc, trapped: Set[int]) -> Dict[int, float]:
+    """Split condensation components into upper / middle / lower bands."""
+    main_lane = 2.4
+    mid_lane = 0.0
+    trap_lane = -2.4
+
+    succs: Dict[int, List[int]] = defaultdict(list)
+    for a, b in scc.dag_edges:
+        succs[a].append(b)
+
+    lane: Dict[int, float] = {}
+    for cid in scc.reverse_topo:
+        if cid == scc.xe_comp:
+            lane[cid] = mid_lane
+        elif scc.components[cid] & trapped:
+            lane[cid] = trap_lane
+        else:
+            outs = succs.get(cid, [])
+            if not outs:
+                lane[cid] = mid_lane
+                continue
+            out_lanes = [lane[o] for o in outs]
+            if all(l >= mid_lane - 1e-9 for l in out_lanes):
+                lane[cid] = main_lane
+            elif all(l <= mid_lane + 1e-9 for l in out_lanes):
+                lane[cid] = trap_lane
+            else:
+                lane[cid] = mid_lane
+
+    preds: Dict[int, List[int]] = defaultdict(list)
+    for a, b in scc.dag_edges:
+        preds[b].append(a)
+    xe_preds = preds.get(scc.xe_comp, [])
+    if xe_preds:
+        lane[scc.xe_comp] = sum(lane[p] for p in xe_preds) / len(xe_preds)
+    return lane
+
+
+def _condensation_layers(scc) -> Dict[int, int]:
+    """Longest-path layer on the condensation DAG; sources at 0, sink rightmost."""
+    preds: Dict[int, List[int]] = defaultdict(list)
+    for a, b in scc.dag_edges:
+        preds[b].append(a)
+    layer: Dict[int, int] = {}
+    for cid in _comp_upstream_order(scc):
+        layer[cid] = 0 if not preds[cid] else 1 + max(layer[p] for p in preds[cid])
+    return layer
+
+
+def _comp_centers_in_layer(
+    scc, layer: Dict[int, int], lane: Dict[int, float], min_sep: float = 2.0,
+) -> Dict[int, float]:
+    """Y center for each SCC; components sharing a layer are stacked vertically."""
+    by_layer: Dict[int, List[int]] = defaultdict(list)
+    for cid, lev in layer.items():
+        by_layer[lev].append(cid)
+
+    center: Dict[int, float] = {}
+    for _lev, cids in by_layer.items():
+        cids = sorted(cids, key=lambda c: (-lane[c], min(scc.components[c])))
+        if len(cids) == 1:
+            center[cids[0]] = lane[cids[0]]
+            continue
+        y0 = lane[cids[0]]
+        for i, cid in enumerate(cids):
+            center[cid] = y0 - i * min_sep
+    return center
+
+
+def _scc_downshift(comp: Set[int]) -> float:
+    """Extra downward bias for nontrivial SCCs (more room for internal edges)."""
+    return 1.35 if len(comp) > 1 else 0.0
+
+
+def build_topo_pos(
+    G: WeightedGraph, scc, R: Set[int], trapped: Set[int],
+) -> Dict[int, Tuple[float, float]]:
+    """Layout from condensation DAG layers (computed); SCCs share a column per layer."""
+    x_step = 2.2
+    intra_step = 1.05
+    layer = _condensation_layers(scc)
+    lane = _assign_comp_lanes(scc, trapped)
+    comp_center = _comp_centers_in_layer(scc, layer, lane)
+    trap_lane = min(lane.values())
+
+    pos: Dict[int, Tuple[float, float]] = {}
+    for cid, lev in layer.items():
+        x = lev * x_step
+        comp = scc.components[cid]
+        cy = comp_center[cid] - _scc_downshift(comp)
+        for nd, dy in _scc_internal_offsets(comp, G, intra_step).items():
+            pos[nd] = (x, cy + dy)
+
+    dead = sorted(set(G.states) - R)
+    if dead:
+        min_x = min(pos[nd][0] for nd in R)
+        dead_y = min(pos[nd][1] for nd in R) - 1.6
+        for i, nd in enumerate(dead):
+            pos[nd] = (min_x - 0.55 * x_step + i * 0.45, dead_y - i * 0.35)
+    return pos, layer, comp_center
+
+
+# Layout 11: multipartite on the state graph (SCC layer as subset); used by figure_stg.
+_SCC_TRIANGLE_SCALE = 0.22
+_BENIGN_SCC = (6, 7, 10)
+_BENIGN_SHIFT_Y = -0.85
+_BENIGN_SHIFT_X = 0.40
+
+
+def _full_state_digraph(G: WeightedGraph):
+    import networkx as nx
+
+    D = nx.DiGraph()
+    for x, _u, y, _w in G.arcs:
+        if x != y:
+            D.add_edge(x, y)
+    return D
+
+
+def _normalize_lr(
+    pos: Dict[int, Tuple[float, float]], xe: int = XE,
+) -> Dict[int, Tuple[float, float]]:
+    if not pos:
+        return pos
+    xs = [p[0] for p in pos.values()]
+    ys = [p[1] for p in pos.values()]
+    xmin, xmax = min(xs), max(xs)
+    ymin, ymax = min(ys), max(ys)
+    xspan = xmax - xmin or 1.0
+    yspan = ymax - ymin or 1.0
+    scale = 12.0 / xspan
+    out = {
+        nd: ((x - xmin) * scale, (y - ymin) / yspan * 6.0 - 3.0)
+        for nd, (x, y) in pos.items()
+    }
+    if xe in out:
+        shift = 12.0 - out[xe][0]
+        out = {nd: (x + shift, y) for nd, (x, y) in out.items()}
+    return out
+
+
+def _place_equilateral_triangle(
+    pos: Dict[int, Tuple[float, float]], comp: Set[int], G: WeightedGraph,
+) -> None:
+    """Reposition a 3-node SCC on a compact equilateral triangle at its centroid."""
+    nodes = _scc_visit_order(comp, G)
+    if len(nodes) != 3:
+        return
+    cx = sum(pos[n][0] for n in nodes) / 3
+    cy = sum(pos[n][1] for n in nodes) / 3
+    ys = [pos[n][1] for n in nodes]
+    span = max(ys) - min(ys)
+    if span < 1e-6:
+        span = 2.0
+    radius = (span / 1.5) * _SCC_TRIANGLE_SCALE
+    for i, nd in enumerate(nodes):
+        ang = math.pi / 2 - i * 2 * math.pi / 3
+        pos[nd] = (cx + radius * math.cos(ang), cy + radius * math.sin(ang))
+
+
+def _shift_nodes(
+    pos: Dict[int, Tuple[float, float]], nodes, dx: float = 0.0, dy: float = 0.0,
+) -> None:
+    for nd in nodes:
+        if nd in pos:
+            x, y = pos[nd]
+            pos[nd] = (x + dx, y + dy)
+
+
+def _rotate_nodes(
+    pos: Dict[int, Tuple[float, float]], nodes, deg_clockwise: float,
+) -> None:
+    """Rotate listed nodes clockwise about their centroid."""
+    pts = [nd for nd in nodes if nd in pos]
+    if len(pts) < 2:
+        return
+    cx = sum(pos[n][0] for n in pts) / len(pts)
+    cy = sum(pos[n][1] for n in pts) / len(pts)
+    ang = -math.radians(deg_clockwise)
+    c, s = math.cos(ang), math.sin(ang)
+    for nd in pts:
+        x, y = pos[nd]
+        dx, dy = x - cx, y - cy
+        pos[nd] = (cx + c * dx - s * dy, cy + s * dx + c * dy)
+
+
+def layout_11_multipartite_states(G, scc, R, trapped):
+    """Multipartite layout: each state's subset = its SCC condensation layer."""
+    import networkx as nx
+
+    layer = _condensation_layers(scc)
+    D = _full_state_digraph(G)
+    for x in D.nodes:
+        if x in R:
+            D.nodes[x]["subset"] = layer[scc.comp_of[x]]
+        else:
+            D.nodes[x]["subset"] = -1
+    pos = nx.multipartite_layout(D, subset_key="subset", align="vertical", scale=2.5)
+    pos = _normalize_lr(pos)
+    if 15 in pos and 16 in pos:
+        pos[15], pos[16] = pos[16], pos[15]
+    for comp in scc.components:
+        if len(comp) == 3:
+            _place_equilateral_triangle(pos, comp, G)
+    if 2 in pos and 5 in pos:
+        pos[2], pos[5] = pos[5], pos[2]
+    if 6 in pos and 7 in pos:
+        pos[6], pos[7] = pos[7], pos[6]
+    if 6 in pos and 10 in pos:
+        pos[6], pos[10] = pos[10], pos[6]
+    _shift_nodes(pos, _BENIGN_SCC, dx=_BENIGN_SHIFT_X, dy=_BENIGN_SHIFT_Y)
+    _rotate_nodes(pos, _BENIGN_SCC, deg_clockwise=40.0)
+    if 9 in pos and 11 in pos:
+        pos[9] = (pos[9][0], pos[11][1])
+    return pos, layer, "11 multipartite_layout (each state, SCC layer)"
+
+
+def _policy_escape(mu_vi, mu_master) -> Set[Tuple[int, int]]:
+    return {
+        (x, mu_master[x][1])
+        for x in mu_vi
+        if x in mu_master and mu_vi[x] != mu_master[x]
+    }
+
+
+def _draw_scc_groups(ax, scc, pos, layer: Dict[int, int]) -> None:
+    """Dashed ovals grouping nodes that belong to the same SCC (same layer column)."""
+    from matplotlib.patches import Ellipse
+
+    for cid, lev in layer.items():
+        comp = scc.components[cid]
+        pts = [pos[nd] for nd in comp if nd in pos]
+        if not pts:
+            continue
+        xs, ys = zip(*pts)
+        cx = sum(xs) / len(xs)
+        cy = sum(ys) / len(ys)
+        w = max(0.95, (max(xs) - min(xs)) + 0.85)
+        h = max(0.95, (max(ys) - min(ys)) + 0.75)
+        ax.add_patch(
+            Ellipse(
+                (cx, cy), w, h, fill=False, edgecolor="#bbbbbb",
+                linewidth=1.0, linestyle=(0, (4, 3)), zorder=0,
+            )
+        )
+
+
+def _draw_stg(
+    ax, G, pos, R: Set[int], scc, layer, comp_center,
+    mu_vi, mu_master, trapped: Set[int], layout_title: str = "",
+) -> None:
     import networkx as nx
 
     base = nx.DiGraph()
-    base.add_nodes_from(POS)
+    base.add_nodes_from(pos)
     all_edges = {(x, y) for x, _u, y, _w in G.arcs if x != y}
-    loop_edges = {(x, y) for x, (_u, y) in mu.items() if x != y}
-    trap_edges = {(x, y) for x, y in loop_edges if x in trapped and y in trapped}
-    key_edges = set(highlight or ()) & loop_edges
-    plain_edges = loop_edges - trap_edges - key_edges
-    base.add_edges_from(all_edges | loop_edges)
+    vi_loop = {(x, y) for x, (_u, y) in mu_vi.items() if x != y}
+    master_loop = {(x, y) for x, (_u, y) in mu_master.items() if x != y}
+    trap_edges = {(x, y) for x, y in vi_loop if x in trapped and y in trapped}
+    escape = _policy_escape(mu_vi, mu_master)
+    master_plain = master_loop - trap_edges - escape
+    base.add_edges_from(all_edges | vi_loop | master_loop)
+    unstab = set(G.states) - R
+
+    _draw_scc_groups(ax, scc, pos, layer)
 
     node_fill, node_edge = [], []
     for nd in base.nodes():
@@ -666,71 +956,89 @@ def _draw_panel(ax, G, mu, title, colour, trapped, highlight=None):
         elif nd in trapped:
             node_fill.append("#fdeced")
             node_edge.append(TRAP)
-        elif nd in (15, 16):
+        elif nd in unstab:
             node_fill.append("#f1f3f4")
             node_edge.append(DEAD)
         else:
             node_fill.append("white")
             node_edge.append("#444444")
     nx.draw_networkx_nodes(
-        base, POS, ax=ax, node_size=760, node_color=node_fill,
+        base, pos, ax=ax, node_size=680, node_color=node_fill,
         edgecolors=node_edge, linewidths=1.5,
     )
     nx.draw_networkx_labels(
-        base, POS, ax=ax, font_size=9,
-        labels={i: rf"$\delta_{{16}}^{{{i}}}$" for i in POS},
+        base, pos, ax=ax, font_size=9,
+        labels={i: rf"$\delta_{{16}}^{{{i}}}$" for i in pos},
     )
 
-    def edges(lst, col, width, alpha=1.0):
+    def edges(lst, col, width, alpha=1.0, rad=0.12):
         if not lst:
             return
         nx.draw_networkx_edges(
-            base, POS, ax=ax, edgelist=sorted(lst), edge_color=col, width=width,
-            alpha=alpha, arrows=True, arrowsize=13, arrowstyle="-|>",
-            node_size=760, min_source_margin=11, min_target_margin=11,
-            connectionstyle="arc3,rad=0.12",
+            base, pos, ax=ax, edgelist=sorted(lst), edge_color=col, width=width,
+            alpha=alpha, arrows=True, arrowsize=12, arrowstyle="-|>",
+            node_size=680, min_source_margin=12, min_target_margin=12,
+            connectionstyle=f"arc3,rad={rad}",
         )
 
-    edges(all_edges - loop_edges, FAINT, 0.9)
-    edges(plain_edges, "#5b6167", 1.5)
-    edges(trap_edges, TRAP, 2.4)
-    edges(key_edges, colour, 2.4)
-    ax.set_title(title, fontsize=10.5)
-    ax.set_xlim(-3.0, 6.6)
-    ax.set_ylim(-3.6, 3.0)
+    used = vi_loop | master_loop
+    edges(all_edges - used, FAINT, 0.9, alpha=0.85)
+    edges(trap_edges, TRAP, 2.3)
+    edges(master_plain, "#5b6167", 1.5)
+    edges(escape, GOOD, 2.5, rad=0.08)
+
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+
+    legend = [
+        Line2D([0], [0], color=TRAP, lw=2.2, label=r"$V_\lambda^*$-greedy (trap)"),
+        Line2D([0], [0], color=GOOD, lw=2.2, label=r"escape arc of $\mu^*$"),
+        Line2D([0], [0], color="#5b6167", lw=1.6, label=r"other arcs of $\mu^*$"),
+        Line2D([0], [0], color=FAINT, lw=1.0, label="unused arc"),
+        Patch(facecolor="#fdeced", edgecolor=TRAP, linewidth=1.5,
+              label="improper under VI"),
+        Patch(facecolor="#eaf5ec", edgecolor=GOOD, linewidth=1.5, label=r"$x_e$"),
+        Patch(facecolor="#f1f3f4", edgecolor=DEAD, linewidth=1.5, label="unstabilizable"),
+    ]
+    ax.legend(
+        handles=legend, loc="lower right", fontsize=8.5,
+        frameon=True, fancybox=False, edgecolor="#cccccc",
+        framealpha=0.92, handlelength=1.8, borderpad=0.55,
+        labelspacing=0.35,
+    )
+
+    xs = [xy[0] for xy in pos.values()]
+    ys = [xy[1] for xy in pos.values()]
+    ax.set_xlim(min(xs) - 1.0, max(xs) + 0.9)
+    ax.set_ylim(min(ys) - 0.55, max(ys) + 0.55)
     ax.axis("off")
+    if layout_title:
+        ax.set_title(layout_title, fontsize=10.5, loc="left", pad=8)
+
+    if unstab:
+        ux = sum(pos[s][0] for s in unstab if s in pos) / len(unstab)
+        uy = min(pos[s][1] for s in unstab if s in pos)
+        ax.text(ux, uy - 0.45, "unstabilizable", fontsize=9.5, color=DEAD, ha="center")
 
 
-def figure_stg(G, mu_vi, mu_master, trapped: Set[int]) -> str:
+def figure_stg(
+    G: WeightedGraph, R: Set[int], scc, mu_vi, mu_master, trapped: Set[int],
+) -> str:
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    fig, axes = plt.subplots(1, 2, figsize=(12.0, 4.2))
-    _draw_panel(
-        axes[0], G, mu_vi,
-        r"(a) closed loop of the $V_\lambda^*$-induced policy: six states"
-        r" never reach $x_e$",
-        TRAP, trapped,
-    )
-    _draw_panel(
-        axes[1], G, mu_master,
-        r"(b) closed loop of $\mu^*$ from Algorithm 1: every state of"
-        r" $\mathcal{V}_s$ reaches $x_e$",
-        GOOD, set(), highlight={(2, 8)},
-    )
-    axes[0].text(4.5, -2.6, "beneficial cycle", fontsize=9.5, color=TRAP, ha="center")
-    axes[0].text(-1.5, -3.35, "unstabilizable", fontsize=9.5, color=DEAD, ha="center")
-    axes[1].annotate(
-        "escape arc paid by $\\mu^*$", xy=(3.5, -1.05), xytext=(4.6, -2.6),
-        fontsize=9.5, color=GOOD, ha="center",
-        arrowprops=dict(arrowstyle="-", color=GOOD, lw=0.8),
-    )
-    fig.tight_layout(pad=0.3)
+    pos, layer, _title = layout_11_multipartite_states(G, scc, R, trapped)
+    fig, ax = plt.subplots(figsize=(13.0, 4.8))
+    _draw_stg(ax, G, pos, R, scc, layer, {}, mu_vi, mu_master, trapped)
+    fig.tight_layout(pad=0.25)
     out = os.path.abspath(os.path.join(RESULTS, "ex1_n4_stg.pdf"))
     fig.savefig(out, bbox_inches="tight", transparent=True)
     fig.savefig(out.replace(".pdf", ".png"), bbox_inches="tight", dpi=200)
+    fig_path = os.path.join(FIGURES, "ex1_stg.pdf")
+    fig.savefig(fig_path, bbox_inches="tight", transparent=True)
+    fig.savefig(fig_path.replace(".pdf", ".png"), bbox_inches="tight", dpi=200)
     plt.close(fig)
     return out
 
@@ -1006,7 +1314,7 @@ def run() -> dict:
     with open(table_path, "w") as fh:
         fh.write(table + "\n")
 
-    fig1 = figure_stg(G, mu_vi, mu_master, EXPECTED_IMPROPER)
+    fig1 = figure_stg(G, R, scc, mu_vi, mu_master, EXPECTED_IMPROPER)
     fig2 = figure_threshold(G, adjR, R)
 
     lines = [

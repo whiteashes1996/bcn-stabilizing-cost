@@ -1,0 +1,3 @@
+config,|S|,solver,coverage,t_core_s,joint,s*,h*,T0_excess,sandwich_ub
+"lac, all inputs (decoy)",105,milp,1.0,236.647,True,0.0,3,0.0,0.0
+"ara, all inputs (decoy)",107,milp,1.0,1527.011,True,0.0,4,0.0,0.0

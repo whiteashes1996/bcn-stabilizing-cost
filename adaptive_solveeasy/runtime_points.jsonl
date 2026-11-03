@@ -1,0 +1,11 @@
+{"family": "path", "n": 2000, "m": 1999, "sync_sweeps": 2000, "sync_scans": 3998000, "heap_scans": 1999, "heap_cmp": 0, "sync_sec": 0.48120983300032094, "heap_sec": 0.0008899579988792539, "repeats": 3}
+{"family": "path", "n": 4000, "m": 3999, "sync_sweeps": 4000, "sync_scans": 15996000, "heap_scans": 3999, "heap_cmp": 0, "sync_sec": 1.8441296250093728, "heap_sec": 0.003216208948288113, "repeats": 3}
+{"family": "path", "n": 8000, "m": 7999, "sync_sweeps": 8000, "sync_scans": 63992000, "heap_scans": 7999, "heap_cmp": 0, "sync_sec": 8.27890070900321, "heap_sec": 0.004446541017387062, "repeats": 2}
+{"family": "path", "n": 16000, "m": 15999, "sync_sweeps": 16000, "sync_scans": 255984000, "heap_scans": 15999, "heap_cmp": 0, "sync_sec": 33.550860000017565, "heap_sec": 0.007610666973050684, "repeats": 2}
+{"family": "path", "n": 32000, "m": 31999, "sync_sweeps": 32000, "sync_scans": 1023968000, "heap_scans": 31999, "heap_cmp": 0, "sync_sec": 130.97670866700355, "heap_sec": 0.014272917003836483, "repeats": 1}
+{"family": "path", "n": 64000, "m": 63999, "sync_sweeps": 64000, "sync_scans": 4095936000, "heap_scans": 63999, "heap_cmp": 0, "sync_sec": 537.9496478340006, "heap_sec": 0.02824033296201378, "repeats": 1}
+{"family": "star", "n": 2000, "m": 1999, "sync_sweeps": 2, "sync_scans": 3998, "heap_scans": 1999, "heap_cmp": 21580, "sync_sec": 0.0004855829756706953, "heap_sec": 0.0043489160016179085, "repeats": 3}
+{"family": "star", "n": 8000, "m": 7999, "sync_sweeps": 2, "sync_scans": 15998, "heap_scans": 7999, "heap_cmp": 101993, "sync_sec": 0.0018657920300029218, "heap_sec": 0.021606665977742523, "repeats": 2}
+{"family": "star", "n": 32000, "m": 31999, "sync_sweeps": 2, "sync_scans": 63998, "heap_scans": 31999, "heap_cmp": 472091, "sync_sec": 0.00847833399893716, "heap_sec": 0.061264833027962595, "repeats": 1}
+{"family": "star", "n": 128000, "m": 127999, "sync_sweeps": 2, "sync_scans": 255998, "heap_scans": 127999, "heap_cmp": 2149490, "sync_sec": 0.033650416997261345, "heap_sec": 0.2695642909966409, "repeats": 1}
+{"family": "star", "n": 256000, "m": 255999, "sync_sweeps": 2, "sync_scans": 511998, "heap_scans": 255999, "heap_cmp": 4557763, "sync_sec": 0.07183799997437745, "heap_sec": 0.5576978329918347, "repeats": 1}

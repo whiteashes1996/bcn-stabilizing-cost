@@ -1,0 +1,6 @@
+[lac, all inputs (decoy)] ...
+    {'config': 'lac, all inputs (decoy)', '|S|': 105, 'solver': 'milp', 'coverage': 1.0, 't_core_s': 236.647, 'joint': True, 's*': 0.0, 'h*': 3, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+    {'config': 'lac, all inputs (decoy)', '|V_s|': 1024, 'gap': 6, 'union_SB': 105, 'complete': True, 't_walk_s': 236.66, 'realized_excess': 0.0, 'max_s*': 0.0, 'joint_global': True}
+[ara, all inputs (decoy)] ...
+    {'config': 'ara, all inputs (decoy)', '|S|': 107, 'solver': 'milp', 'coverage': 1.0, 't_core_s': 1527.011, 'joint': True, 's*': 0.0, 'h*': 4, 'T0_excess': 0.0, 'sandwich_ub': 0.0}
+    {'config': 'ara, all inputs (decoy)', '|V_s|': 512, 'gap': 6, 'union_SB': 107, 'complete': True, 't_walk_s': 1527.03, 'realized_excess': 0.0, 'max_s*': 0.0, 'joint_global': True}

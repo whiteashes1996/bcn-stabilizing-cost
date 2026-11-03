@@ -1,0 +1,2 @@
+E21-exact: mammalian decoy, lambda=1/2, eps=1/20; beneficial-cycle comps=1
+  |S|=14 HK==pipeline:True s*=49/20 h*=8 T0_excess=49/20 Exc*=49/20 sandwich_ub=2499/512

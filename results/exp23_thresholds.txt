@@ -1,0 +1,8 @@
+E23 lambda sweep, exact Fractions. lambda_bc: beneficial cycle on the tracked component disappears. lambda_joint: G_0 starts to span.
+example1-H lambda_bc: has_cycle=1 at lam=0.76759185791015625; has_cycle=0 at lam=0.767592620849609375; width=0.000000762939453125
+example1-H lambda_joint: no crossing on the grid; joint=1 from lam=0.01 to lam=0.99
+example1-B lambda_bc: has_cycle=1 at lam=0.41421356201171875; has_cycle=0 at lam=0.414214324951171875; width=0.000000762939453125
+example1-B lambda_joint: joint=0 at lam=0.399481964111328125; joint=1 at lam=0.39948272705078125; width=0.000000762939453125
+mammalian-decoy lambda_bc: has_cycle=1 at lam=0.99164300537109375; has_cycle=0 at lam=0.9916435546875; width=0.00000054931640625
+mammalian-decoy lambda_joint: joint=0 at lam=0.99164300537109375; joint=1 at lam=0.9916435546875; width=0.00000054931640625
+example1-H algebraic cycle root (1+sqrt(13))/6 ≈ 0.767591879244

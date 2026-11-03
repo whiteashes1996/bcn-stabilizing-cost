@@ -1,0 +1,2 @@
+E23 mammalian decoy, lambda=1/2, eps=1/20, exact Fractions
+  config=mammalian cell cycle (decoy) |S|=14 joint=False |arcs|=28 |G_0|=12 reach=6 fallback_excess=3087/640=4.8234375 n_excess_S=8 Exc*=49/20=2.45 n_trees=5376 n_pos_best=8 gap=234 max_excess_global=3087/640=4.8234375 n_excess_global=234

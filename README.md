@@ -2,18 +2,32 @@
 
 Companion code for the paper on computing the **discounted minimum stabilizing cost** for Boolean control networks (BCNs): the master pipeline (reachability restriction, condensation, folding, label-correcting on benign SCCs, beneficial-cycle detection, `SolveCore`, and feedback recovery).
 
+Paper manuscript repository (private): `whiteashes1996/stab-min-cost`.
+
 ## Repository layout
 
 ```
 .
-├── methods.py          # Reference Python library (exact Fraction / float64)
-├── core_solver.py      # Earlier solver used by exp1–exp13
-├── exp14_ex1_n4.py     # Example 1: 16-state full pipeline (exact arithmetic)
-├── exp16_ex2_real.py   # Example 2: six literature networks
-├── exp17_*.py          # Example 3: C++ ↔ Python cross-check and plots
-├── cpp/                # C++ port of the pipeline (scalability)
-├── networks/           # Literature network transition tables
-├── results/            # Cached numerical outputs used in the paper
+├── methods.py             # Reference Python library (exact Fraction / float64)
+├── core_solver.py         # Earlier solver used by exp1–exp13
+├── folded_uniform.py      # Uniform-optimality helpers
+├── verify_uniform.py      # Uniform-optimality checks
+├── verify_reductions.py   # Reduction checks
+├── verify_W_ara.py        # Ara stage-cost verification
+├── exp14_ex1_n4.py        # Example 1: 16-state full pipeline (exact arithmetic)
+├── exp16_ex2_real.py      # Example 2: six literature networks
+├── exp17_*.py             # Example 3: C++ ↔ Python cross-check and plots
+├── exp19_lambda_bc_scan.py
+├── exp20_uniform.py
+├── exp21_*.py             # Uniform optimality on real / exact MCC
+├── exp22_tightness_search.py
+├── exp23_joint_feedback.py
+├── cpp/                   # C++ port of the pipeline (scalability)
+├── networks/              # Literature network transition tables
+├── results/               # Cached numerical outputs used in the paper
+├── figure_scripts/        # Scripts that draw manuscript figures
+├── legacy_figures/        # Older figure assets no longer in the manuscript tree
+├── adaptive_solveeasy/    # Side study: adaptive SolveEasy runtime / discount
 └── requirements.txt
 ```
 
@@ -36,11 +50,14 @@ python exp14_ex1_n4.py
 # Example 2 (literature networks; float64)
 python exp16_ex2_real.py
 
+# Joint-feedback sweep (Example joint)
+python exp23_joint_feedback.py
+
 # C++ build and a short smoke run
 cd cpp && make && ./build/bcn --help
 ```
 
-Legacy scripts `exp1`–`exp13` and `run_all.py` remain for earlier drafts; the paper’s Illustrative Examples section corresponds to **exp14 / exp16 / exp17**.
+Legacy scripts `exp1`–`exp13` and `run_all.py` remain for earlier drafts. The paper’s Illustrative Examples section corresponds mainly to **exp14 / exp16 / exp17 / exp23**.
 
 ## Citation
 

@@ -1,0 +1,20 @@
+E20: uniform optimality certificates
+  exact Fractions throughout on folded components
+
+  two-state (prop:no-joint): |S|=2 joint=False Exc*=1/2 s*=1/2 h*=1 tree_excess=1/2 n_gap=2
+  3-ring: |S|=3 joint=False Exc*=3/2 s*=3/2 h*=1 tree_excess=3/2 n_gap=3
+  5-state ratio: |S|=5 joint=False Exc*=9/2 s*=83/32 h*=5 tree_excess=9/2 n_gap=5
+  Example1-H: |S|=3 joint=True Exc*=0 s*=0 h*=3 tree_excess=0 n_gap=3
+
+MILP / large kernels:
+  existing B-lac-restricted: |S|=34 coverage=1.0 t=3.501s certified=34
+  existing A-tlgl: |S|=20 coverage=1.0 t=1.301s certified=20
+  existing C-mcc-cycle: |S|=14 coverage=1.0 t=0.402s certified=14
+  existing ara-restricted: |S|=19 coverage=1.0 t=0.768s certified=19
+  kernels beyond the Held–Karp cap (|S|=34, 105, 107) are run by exp21_uniform_real.py; see exp21_uniform_real_{small,large}.txt.
+
+Notes:
+  Example 1 (global): exhaustive 2^16 enumeration (exp18) shows a proper feedback attaining J* on all 14 states of V_s, so Exc*(global)=0 even though H carries a beneficial cycle (V*<J* on 6 states).
+  Upper sandwich factor tightness: open; 5-state ratio Exc*/s* = 144/83 ≈ 1.735 vs (1-λ^5)/(1-λ)=31/16=1.9375 at λ=1/2.
+  Earlier searches reported Exc*/s* up to 949/375 ≈ 2.53 (lambda=9/10, Sep 22) and, in an independent rerun, at most ≈ 1.86 (lambda=9/10, Sep 28); both are J*-based. See exp22_tightness_search.txt for the current exact search.
+  pulp available: True

@@ -1,0 +1,13 @@
+E23 Example 1, lambda=1/2, exact Fractions
+  |V_s|=14 gap=[2, 3, 4, 5, 13, 14] joint_global=True
+  H=[2, 3, 5] |arcs|=6 |G_0|=3 reach=3 joint=True
+  t_test_s=1.419e-05 t_core_s=2.883e-05
+  enumeration: n_trees=4 Exc*=0
+  arcs (kind, x, y, u, weight, excess, in G_0):
+    exit     x=2 y=None u=None w=3.5 eps=0 G0=True
+    internal x=2 y=3 u=1 w=1 eps=-1.3125 G0=False
+    internal x=3 y=5 u=1 w=1 eps=0 G0=True
+    internal x=3 y=5 u=2 w=2 eps=1 G0=False
+    internal x=5 y=2 u=1 w=1 eps=0 G0=True
+    internal x=5 y=2 u=2 w=2 eps=1 G0=False
+  recovered mu on H: 2->(2, 8), 3->(1, 5), 5->(1, 2)
